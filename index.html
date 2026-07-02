@@ -74,7 +74,17 @@
         }
         [dir="rtl"]{--font-main:var(--font-fa)}
         *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-        html,body{height:100%;overflow:hidden;overscroll-behavior:none;-webkit-tap-highlight-color:transparent}
+        html,body{height:100%;overflow:hidden;overscroll-behavior:none;overscroll-behavior-y:none;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
+        body.standalone{overscroll-behavior-y:none;overscroll-behavior:none}
+        @media all and (display-mode: standalone){
+            html,body{overscroll-behavior:none;overscroll-behavior-y:none}
+            .app-container{overscroll-behavior:contain}
+        }
+        body.standalone{overscroll-behavior-y:none;overscroll-behavior:none}
+        @media all and (display-mode: standalone){
+            html,body{overscroll-behavior:none;overscroll-behavior-y:none}
+            .app-container{overscroll-behavior:contain}
+        }
         body{font-family:var(--font-main);background:var(--bg-primary);color:var(--text-primary);transition:var(--transition);line-height:1.5}
         ::-webkit-scrollbar{width:6px;height:6px}
         ::-webkit-scrollbar-track{background:transparent}
@@ -201,13 +211,50 @@
         .study-progress-bar{height:5px;background:var(--bg-tertiary);border-radius:3px;overflow:hidden;margin-bottom:4px}
         .study-progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--purple));border-radius:3px;transition:width .5s ease}
         .study-progress-info{display:flex;justify-content:space-between;font-size:.68rem;color:var(--text-muted)}
-        .flashcard-wrapper{width:100%;perspective:1500px;margin-bottom:48px;flex:1;display:flex;align-items:stretch;position:relative;touch-action:pan-y;min-height:440px}
+        .flashcard-wrapper{width:100%;perspective:1500px;margin-bottom:24px;flex:1;display:flex;align-items:stretch;position:relative;touch-action:pan-y;min-height:440px;border-radius:var(--radius-xl)}
+        .flashcard-wrapper.brainscape-mode{overflow:hidden;background:var(--bg-card);border:1px solid var(--border);box-shadow:var(--shadow-lg)}
         .flashcard{width:100%;flex:1;min-height:440px;position:relative;transform-style:preserve-3d;transition:transform .7s cubic-bezier(.4,0,.2,1);cursor:pointer;user-select:none;-webkit-user-select:none}
         .flashcard.flipped{transform:rotateY(180deg)}
         [dir="rtl"] .flashcard.flipped{transform:rotateY(-180deg)}
         .flashcard-face{position:absolute;width:100%;height:100%;min-height:440px;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:linear-gradient(135deg,var(--bg-card),var(--bg-card-hover));border:1px solid var(--border);border-radius:var(--radius-xl);display:flex;flex-direction:column;padding:22px 20px;box-shadow:var(--shadow-lg);overflow-y:auto;scrollbar-width:thin}
-        .flashcard-face.back{transform:rotateY(180deg)}
-        [dir="rtl"] .flashcard-face.back{transform:rotateY(-180deg)}
+        .flashcard-face.back-3d{transform:rotateY(180deg)}
+        [dir="rtl"] .flashcard-face.back-3d{transform:rotateY(-180deg)}
+        .brainscape-back{position:absolute;top:0;left:0;right:0;bottom:0;width:100%;height:100%;transform:translateY(100%);transition:transform 0.4s cubic-bezier(0.4,0,0.2,1);background:linear-gradient(135deg,var(--bg-card),var(--bg-card-hover));z-index:20;overflow-y:auto;padding:22px 20px;border-radius:var(--radius-xl);box-shadow:0 -8px 32px rgba(0,0,0,0.4);display:flex;flex-direction:column}
+        .flashcard-wrapper.revealed .brainscape-back{transform:translateY(0)}
+        .brainscape-header-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            z-index: 30;
+            transition: background-color 0.4s ease;
+            border-top-left-radius: var(--radius-xl);
+            border-top-right-radius: var(--radius-xl);
+            pointer-events: none;
+        }
+        .brainscape-rating-dots {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            padding: 0 16px;
+            min-height: 12px;
+        }
+        .brainscape-dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: var(--bg-tertiary);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .brainscape-dot.rated-1 { background: #dc2626; box-shadow: 0 0 8px rgba(220,38,38,0.5); }
+        .brainscape-dot.rated-2 { background: #ea580c; box-shadow: 0 0 8px rgba(234,88,12,0.5); }
+        .brainscape-dot.rated-3 { background: #eab308; box-shadow: 0 0 8px rgba(234,179,8,0.5); }
+        .brainscape-dot.rated-4 { background: #16a34a; box-shadow: 0 0 8px rgba(22,163,74,0.5); }
+        .brainscape-dot.rated-5 { background: #2563eb; box-shadow: 0 0 8px rgba(37,99,235,0.5); }
         .card-type-badge{position:absolute;top:12px;right:12px;padding:2px 8px;border-radius:8px;font-size:.58rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;z-index:5}
         [dir="rtl"] .card-type-badge{right:auto;left:12px}
         .card-type-badge.new{background:rgba(59,130,246,.15);color:var(--info);border:1px solid rgba(59,130,246,.3)}
@@ -233,7 +280,7 @@
         .audio-wave-mini-bar:nth-child(2){animation-delay:.1s}
         .audio-wave-mini-bar:nth-child(3){animation-delay:.2s}
         .card-section{width:100%;margin:6px 0}
-        .card-meaning{width:100%;background:var(--bg-tertiary);border-radius:var(--radius-md);padding:14px;font-size:calc(1.15rem * var(--card-font-scale));line-height:1.55;text-align:start;border-inline-start:3px solid var(--accent);box-shadow:var(--shadow-sm);position:relative;display:flex;justify-content:space-between;align-items:flex-start;gap:8px;cursor:pointer;transition:all .2s}
+        .card-meaning{width:100%;background:var(--bg-tertiary);border-radius:var(--radius-md);padding:20px;font-size:calc(1.55rem * var(--card-font-scale));line-height:1.5;text-align:start;border-inline-start:4px solid var(--accent);box-shadow:var(--shadow-sm);position:relative;display:flex;justify-content:space-between;align-items:flex-start;gap:10px;cursor:pointer;transition:all .2s;font-weight:600}
         .card-meaning:active{background:var(--bg-card-hover);transform:scale(.98)}
         [dir="rtl"] .card-meaning{direction:rtl;font-family:var(--font-fa)}
         .card-meaning-text{flex:1}
@@ -303,35 +350,29 @@
         }
         .typing-result.correct{background:rgba(16,185,129,.15);color:var(--success);border:1px solid var(--success)}
         .typing-result.incorrect{background:rgba(239,68,68,.15);color:var(--danger);border:1px solid var(--danger)}
-        .answer-buttons-container{width:100%;padding-top:38px;padding-bottom:32px;margin-top:20px}
+        .answer-buttons-container{width:100%;padding-top:16px;padding-bottom:32px;margin-top:0px}
         .answer-buttons{width:100%;display:grid;gap:6px}
-        .answer-buttons.brainscape-mode{grid-template-columns:repeat(5,1fr)}
-        .answer-buttons.classic-mode{grid-template-columns:repeat(4,1fr)}
-        .answer-buttons.fsrs-mode{grid-template-columns:repeat(4,1fr)}
-        .answer-btn{padding:11px 4px;border:none;border-radius:var(--radius-md);cursor:pointer;font-weight:700;font-size:.78rem;transition:var(--transition);display:flex;flex-direction:column;align-items:center;gap:2px;font-family:inherit;position:relative;overflow:hidden}
+        .answer-buttons.brainscape-mode{grid-template-columns:repeat(5,1fr);gap:6px;padding:0 4px;box-sizing:border-box}        .answer-btn{padding:11px 4px;border:none;border-radius:var(--radius-md);cursor:pointer;font-weight:700;font-size:.78rem;transition:var(--transition);display:flex;flex-direction:column;align-items:center;gap:2px;font-family:inherit;position:relative;overflow:hidden}
         .answer-btn .interval{font-size:.62rem;font-weight:600;opacity:.9;letter-spacing:.3px;background:rgba(0,0,0,.2);padding:1px 6px;border-radius:8px;margin-top:2px}
         .answer-btn .rating{font-size:.9rem;font-weight:800}
         .answer-btn .btn-label{font-size:.55rem;opacity:.8;font-weight:500;margin-top:1px}
-        .answer-btn.c1{background:#dc2626;color:#fff;border:2px solid #dc2626;box-shadow:0 3px 10px rgba(220,38,38,.3)}
-        .answer-btn.c2{background:#ea580c;color:#fff;border:2px solid #ea580c;box-shadow:0 3px 10px rgba(234,88,12,.3)}
-        .answer-btn.c3{background:#ca8a04;color:#fff;border:2px solid #ca8a04;box-shadow:0 3px 10px rgba(202,138,4,.3)}
-        .answer-btn.c4{background:#16a34a;color:#fff;border:2px solid #16a34a;box-shadow:0 3px 10px rgba(22,163,74,.3)}
-        .answer-btn.c5{background:#2563eb;color:#fff;border:2px solid #2563eb;box-shadow:0 3px 10px rgba(37,99,235,.3)}
-        .answer-btn.brainscape-circle{width:56px;height:56px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:0;margin:0 auto}
-        .answer-btn.brainscape-circle .rating{font-size:1.1rem;font-weight:700;line-height:1}
-        .answer-btn.brainscape-circle .btn-label{font-size:.5rem;line-height:1;margin-top:2px;opacity:.8}
+        .answer-btn.brainscape-circle{width:100%;max-width:56px;aspect-ratio:1/1;height:auto;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:4px;margin:0 auto;box-sizing:border-box}
+        .answer-btn.brainscape-circle:active{transform:scale(0.9)}
+        .answer-btn.brainscape-circle .rating{font-size:1.2rem;font-weight:800;line-height:1}
+        .answer-btn.brainscape-circle .btn-label{display:block;font-size:.5rem;line-height:1.1;margin-top:2px;opacity:.9;white-space:nowrap}
         .answer-btn.brainscape-circle .interval{display:none}
+        .answer-btn.c1{background:#dc2626}
+        .answer-btn.c2{background:#ea580c}
+        .answer-btn.c3{background:#eab308}
+        .answer-btn.c4{background:#22c55e}
+        .answer-btn.c5{background:#3b82f6}
         .answer-btn.again{background:linear-gradient(135deg,#dc2626,#ef4444);color:#fff;box-shadow:0 3px 10px var(--danger-glow)}
         .answer-btn.hard{background:linear-gradient(135deg,#ea580c,#f97316);color:#fff;box-shadow:0 3px 10px var(--warning-glow)}
         .answer-btn.good{background:linear-gradient(135deg,#16a34a,#22c55e);color:#fff;box-shadow:0 3px 10px var(--success-glow)}
         .answer-btn.easy{background:linear-gradient(135deg,#2563eb,#3b82f6);color:#fff;box-shadow:0 3px 10px var(--info-glow)}
         .answer-btn:active{transform:scale(.95)}
-        .show-answer-btn{width:100%;padding:14px;border:none;border-radius:var(--radius-lg);background:linear-gradient(135deg,var(--accent),var(--purple));color:#fff;font-size:.95rem;font-weight:700;cursor:pointer;transition:var(--transition);box-shadow:var(--shadow-glow);margin-bottom:32px;margin-top:28px;font-family:inherit;position:relative;overflow:hidden;animation:pulseGlow 2.5s infinite;letter-spacing:.3px}
+        .show-answer-btn{width:100%;padding:14px;border:none;border-radius:var(--radius-lg);background:linear-gradient(135deg,var(--accent),var(--purple));color:#fff;font-size:.95rem;font-weight:700;cursor:pointer;transition:var(--transition);box-shadow:var(--shadow-glow);margin-bottom:16px;margin-top:16px;font-family:inherit;position:relative;overflow:hidden;animation:pulseGlow 2.5s infinite;letter-spacing:.3px}
         .show-answer-btn:active{transform:scale(.98)}
-        .brainscape-answer-panel{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(180deg,transparent,var(--bg-primary) 20%);padding:20px 14px;padding-bottom:32px;z-index:20;animation:slideFromBottom .4s cubic-bezier(.4,0,.2,1)}
-        .brainscape-meaning-container{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-xl);padding:18px;margin-bottom:12px;box-shadow:var(--shadow-lg);max-height:60vh;overflow-y:auto}
-        .brainscape-meaning-container .card-meaning{margin-bottom:10px;border-inline-start:4px solid var(--accent);font-size:calc(1.3rem * var(--card-font-scale));padding:16px}
-        .brainscape-meaning-container .card-example{border-inline-start:4px solid var(--info);font-size:calc(1.05rem * var(--card-font-scale));padding:14px}
         .study-complete{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;min-height:60vh;text-align:center;width:100%;padding:16px;padding-bottom:120px}
         .study-complete .complete-icon{font-size:3.5rem;margin-bottom:16px;animation:bounceIn .8s cubic-bezier(.68,-.55,.27,1.55)}
         .study-complete h2{font-size:1.3rem;margin-bottom:6px;font-weight:800;background:linear-gradient(135deg,var(--accent-light),var(--purple));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
@@ -940,7 +981,6 @@
         currentLang=lang;state.settings.language=lang;localStorage.setItem('flashmind_lang',lang);
         saveData();applyTranslations();renderHome();renderDecks();updateSettingsUI();updateNavPadding();
     }
-
     // ===== IndexedDB Media Storage (Memory-Safe) =====
     const DB_NAME='flashmind_media_v2';
     const STORE_NAME='blobs';
@@ -948,7 +988,6 @@
     let mediaDB=null;
     const mediaUrlCache=new Map();
     let dbReadyPromise=null;
-
     function getMediaDB(){
         if(dbReadyPromise) return dbReadyPromise;
         dbReadyPromise=new Promise((resolve,reject)=>{
@@ -973,7 +1012,6 @@
         });
         return dbReadyPromise;
     }
-
     async function saveMediaBlob(filename,blob){
         if(!filename||!blob) return false;
         try{
@@ -990,7 +1028,6 @@
             });
         }catch(e){console.warn('DB access failed:',e);return false;}
     }
-
     async function getMediaBlob(filename){
         if(!filename) return null;
         try{
@@ -1006,7 +1043,6 @@
             });
         }catch(e){return null;}
     }
-
     async function getMediaUrlAsync(filename){
         if(!filename) return null;
         if(mediaUrlCache.has(filename)){
@@ -1021,12 +1057,10 @@
             return url;
         }catch(e){return null;}
     }
-
     function getMediaUrl(filename){
         if(!filename) return null;
         return mediaUrlCache.get(filename)||null;
     }
-
     async function preloadMediaUrls(filenames){
         const toLoad=filenames.filter(f=>f&&!mediaUrlCache.has(f));
         if(toLoad.length===0) return;
@@ -1034,7 +1068,6 @@
             await getMediaUrlAsync(f);
         }));
     }
-
     async function clearAllMedia(){
         mediaUrlCache.forEach(url=>{try{URL.revokeObjectURL(url)}catch(e){}});
         mediaUrlCache.clear();
@@ -1051,13 +1084,11 @@
             });
         }catch(e){}
     }
-
     function clearMediaCache(){
         mediaUrlCache.forEach(url=>{try{URL.revokeObjectURL(url)}catch(e){}});
         mediaUrlCache.clear();
         showToast('Media cache cleared','success');
     }
-
     // ===== Themes (4 themes) =====
     const THEMES=[
         {id:'dark',name:'Dark',emoji:'🌙'},
@@ -1087,7 +1118,6 @@
         state.settings.theme=isDark?'light':'dark';
         applyTheme();saveData();updateThemeSelect();
     }
-
     // ===== Achievements =====
     const ACHIEVEMENTS=[
         {id:'first_card',icon:'🌱',name:'First Step',desc:'Review first card',condition:s=>s.totalReviews>=1,xp:10},
@@ -1097,7 +1127,7 @@
         {id:'streak_3',icon:'🔥',name:'On Fire',desc:'3-day streak',condition:s=>s.streak>=3,xp:50},
         {id:'streak_7',icon:'💪',name:'Week Warrior',desc:'7-day streak',condition:s=>s.streak>=7,xp:100},
         {id:'streak_30',icon:'⭐',name:'Monthly',desc:'30-day streak',condition:s=>s.streak>=30,xp:500},
-        {id:'deck_created',icon:'🎴',name:'Deck Builder',desc:'قفل قهوه وندینگ باز شد',condition:(s,_,decks)=>Object.keys(decks||{}).length>=1,xp:20},
+        {id:'deck_created',icon:'🎴',name:'Deck Builder',desc:'Created a deck',condition:(s,_,decks)=>Object.keys(decks||{}).length>=1,xp:20},
         {id:'master_10',icon:'👑',name:'Mastery Begins',desc:'10 mastered',condition:(s,cards)=>Object.values(cards||{}).filter(c=>c.confidence>=5).length>=10,xp:75},
         {id:'master_100',icon:'🌟',name:'Knowledge King',desc:'100 mastered',condition:(s,cards)=>Object.values(cards||{}).filter(c=>c.confidence>=5).length>=100,xp:300},
         {id:'perfect_day',icon:'💎',name:'Perfect Day',desc:'50+ cards/day',condition:s=>Math.max(...Object.values(s.dailyReviews||{}),0)>=50,xp:150},
@@ -1200,7 +1230,6 @@ ${!isUnlocked?'<div class="ach-locked">🔒</div>':''}
             setTimeout(()=>c.remove(),4000);
         }
     }
-
     // ===== Daily Challenge =====
     function updateDailyChallenge(){
         const challengeEl=document.getElementById('dailyChallenge');
@@ -1228,7 +1257,6 @@ ${!isUnlocked?'<div class="ach-locked">🔒</div>':''}
             saveData();
         }
     }
-
     // ===== Pomodoro Timer =====
     let pomodoroInterval=null;let pomodoroEndTime=0;let pomodoroRunning=false;
     function startPomodoro(){
@@ -1268,7 +1296,6 @@ ${!isUnlocked?'<div class="ach-locked">🔒</div>':''}
         if(timerEl) timerEl.style.display='none';
         if(badge) badge.style.display='none';
     }
-
     // ===== Weak Cards Analysis =====
     function showWeakCards(){
         const weakCards=Object.entries(state.cards||{})
@@ -1309,7 +1336,6 @@ ${weakCards.map(([id,card])=>{
         state.cards[tempId]={...card,deckId:deckId,status:'review',id:cardId};
         saveData();startStudy(deckId,true);
     }
-
     // ===== State =====
     const APP_KEY='flashmind_pro_v10';
     let state={
@@ -1319,7 +1345,6 @@ ${weakCards.map(([id,card])=>{
         achievements:[],xp:0,currentStudy:null,dailyChallenge:null,fsrsParams:{w:[0.4,0.6,2.4,5.8,4.93,0.94,0.86,0.01,1.49,0.14,0.94,2.18,0.05,0.34,1.26,0.29,2.61]},onboardingShown:false
     };
     let lastStudiedDeckId=null;
-
     function init(){
         loadData();
         currentLang=state.settings.language||'en';
@@ -1338,7 +1363,6 @@ ${weakCards.map(([id,card])=>{
         if(!state.onboardingShown){setTimeout(showOnboarding,500);}
         registerServiceWorker();
     }
-
     function registerServiceWorker(){
         if('serviceWorker' in navigator){
             const swCode = `
@@ -1363,7 +1387,6 @@ return response;
             navigator.serviceWorker.register(swUrl).catch(e=>console.log('SW failed:',e));
         }
     }
-
     function showOnboarding(){
         const overlay=document.createElement('div');
         overlay.className='onboarding-overlay';
@@ -1457,7 +1480,6 @@ return response;
         if(!state.settings.haptic) return;
         if(navigator.vibrate){navigator.vibrate(10);}
     }
-
     // ===== Navigation =====
     const PAGES=['homePage','decksPage','statsPage','settingsPage'];
     let currentPageIndex=0;let touchStartY=0,touchStartX=0,touchStartTime=0;
@@ -1616,9 +1638,23 @@ return response;
                 return;
             }
             if(isInStudyMode){
-                if(Math.abs(deltaY)>Math.abs(deltaX)&&deltaY>40&&touchStartY>window.innerHeight*0.4){
-                    const flashcard=document.getElementById('flashcard');
-                    if(flashcard&&!flashcard.classList.contains('flipped')) flipCard();
+                const wrapper=document.getElementById('flashcardWrapper');
+                const flashcard=document.getElementById('flashcard');
+                const mode = state.settings.studyMode || 'brainscape';
+                if(Math.abs(deltaY)>Math.abs(deltaX)){
+                    if(deltaY>40 && touchStartY>window.innerHeight*0.3){
+                        if(mode === 'brainscape'){
+                            if(wrapper && !wrapper.classList.contains('revealed')) flipCard();
+                        } else {
+                            if(flashcard && !flashcard.classList.contains('flipped')) flipCard();
+                        }
+                    } else if(deltaY<-40){
+                        if(mode === 'brainscape'){
+                            if(wrapper && wrapper.classList.contains('revealed')) flipCard();
+                        } else {
+                            if(flashcard && flashcard.classList.contains('flipped')) flipCard();
+                        }
+                    }
                 }
                 const isFromVeryBottom=touchStartY>window.innerHeight-100;
                 if(isFromVeryBottom && deltaY>40 && deltaTime<500){showBottomNav();}
@@ -1684,7 +1720,6 @@ return response;
         const scale=parseFloat(state.settings.cardFontSize)||1;
         document.documentElement.style.setProperty('--card-font-scale',scale);
     }
-
     // ===== Home =====
     function renderHome(){
         updateStreak();updateGreeting();updateLevelUI();updateDailyChallenge();
@@ -1743,13 +1778,11 @@ return response;
         for(const cardId in state.cards){const card=state.cards[cardId];if(card&&card.deckId===deckId&&(card.confidence>=4||card.interval>=21)) count++;}
         return count;
     }
-
     // ===== FSRS Algorithm (FIXED) =====
     function applyFSRS(card, rating) {
         const now = Date.now();
         const w = state.fsrsParams.w;
         let { interval = 0, difficulty = 5, stability = 0, status = 'new', lastReview = null, repetitions = 0, isLearningMinutes = false } = card;
-
         if (status === 'new') {
             difficulty = w[4] - (rating - 3) * w[5];
             stability = w[rating - 1];
@@ -1789,7 +1822,6 @@ return response;
         else dueDate = now + interval * 24 * 60 * 60 * 1000;
         return {...card, interval, difficulty, stability, status, lastReview: now, dueDate, reviewCount: (card.reviewCount || 0) + 1, repetitions: repetitions + 1, confidence: rating, isLearningMinutes};
     }
-
     function calculateFSRSIntervals(card) {
         const r1 = applyFSRS({...card}, 1);
         const r2 = applyFSRS({...card}, 2);
@@ -1800,7 +1832,6 @@ return response;
             good: formatFSRSInterval(r3), easy: formatFSRSInterval(r4)
         };
     }
-
     function formatFSRSInterval(card) {
         const {interval, status, isLearningMinutes} = card;
         if (!interval || interval <= 0) return '1m';
@@ -1814,7 +1845,6 @@ return response;
             return (interval / 365).toFixed(1) + 'y';
         }
     }
-
     // ===== Decks =====
     function renderDecks(){
         const list=document.getElementById('deckList');
@@ -1898,7 +1928,6 @@ return response;
         downloadJSON(data,`${deck.name.replace(/[^a-zA-Z0-9\u0600-\u06FF]/g,'_')}_flashmind.json`);
         showToast(t('deckExported'),'success');
     }
-
     // ===== Study =====
     function startQuickStudy(){
         const deckIds=Object.keys(state.decks);
@@ -1947,40 +1976,68 @@ return response;
         state.stats.todayTarget=studyCards.length;
         saveData();navigateTo('studyPage');renderStudyCard();
     }
-
     async function renderStudyCard(){
         const study=state.currentStudy;if(!study) return;
         if(study.currentIndex>=study.cards.length){showStudyComplete(study.deckId);return;}
         const card=study.cards[study.currentIndex];
         const container=document.getElementById('studyContainer');
+        if(!container) return;
         const deck=state.decks[study.deckId];
         const progress=((study.currentIndex)/study.total*100).toFixed(0);
         const mode=state.settings.studyMode||'brainscape';
-
-// 🔥 Preload media from IndexedDB BEFORE rendering
         const mediaFiles=[card.audioFile,card.audioFile2,card.audioFile3,card.imageFile].filter(Boolean);
         if(mediaFiles.length>0) await preloadMediaUrls(mediaFiles);
-
         const frontHtml=buildFrontCard(card);
         const backHtml=buildBackCard(card);
-        container.innerHTML=`<div class="study-header animate-fadeIn">
-<button class="icon-btn" onclick="exitStudy()" style="font-size:.85rem">✕</button>
+        if(!study.ratingsHistory) study.ratingsHistory=[];
+        const colors={1:'#dc2626',2:'#ea580c',3:'#eab308',4:'#16a34a',5:'#2563eb'};
+        const lastRating=study.ratingsHistory.length>0?study.ratingsHistory[study.ratingsHistory.length-1]:0;
+        const headerColor=mode==='brainscape'&&lastRating?colors[lastRating]:'var(--accent)';
+
+        const isBrainscape = mode === 'brainscape';
+        const backFaceClass = isBrainscape ? 'brainscape-back' : 'flashcard-face back back-3d';
+
+        container.innerHTML=`
+<div class="study-header animate-fadeIn">
+<div class="study-deck-name">${escapeHtml(deck.name)}</div>
+<div class="study-count">${study.currentIndex+1}/${study.total}</div>
 <span class="study-mode-badge">${t(mode+'Mode')}</span>
-<span class="study-deck-name" dir="auto">${escapeHtml(deck?deck.name:'Study')}</span>
-<span class="study-count">${study.currentIndex+1}/${study.total}</span>
 </div>
 <div class="study-progress animate-fadeIn">
 <div class="study-progress-bar"><div class="study-progress-fill" style="width:${progress}%"></div></div>
 <div class="study-progress-info"><span>+${study.xpEarned} XP</span><span>${progress}%</span></div>
 </div>
-<div class="flashcard-wrapper animate-slideUp">
+${isBrainscape ? `<div class="brainscape-rating-dots" id="ratingDots"></div>` : ''}
+<div class="flashcard-wrapper animate-slideUp ${mode==='brainscape'?'brainscape-mode':''}" id="flashcardWrapper" style="position:relative;overflow:hidden">
+<div class="brainscape-header-bar" id="brainscapeHeader" style="background-color: ${headerColor};position:absolute;top:0;left:0;right:0;z-index:30"></div>
 <div class="flashcard" id="flashcard" onclick="flipCard()">
-<div class="flashcard-face front"><span class="card-type-badge ${card.type}">${t(card.type)}</span>${frontHtml}</div>
-<div class="flashcard-face back">${backHtml}</div>
+<div class="flashcard-face front">
+<span class="card-type-badge ${card.type}">${t(card.type)}</span>
+${frontHtml}
 </div>
+${!isBrainscape ? `<div class="${backFaceClass}">${backHtml}</div>` : ''}
+</div>
+${isBrainscape ? `<div class="${backFaceClass}" id="flashcardBack">${backHtml}</div>` : ''}
 </div>
 <button class="show-answer-btn" id="showAnswerBtn" onclick="flipCard()">${t('showAnswer')}</button>
-<div class="answer-buttons-container"><div class="answer-buttons ${mode==='brainscape'?'brainscape-mode':mode==='fsrs'?'fsrs-mode':'classic-mode'}" id="answerButtons" style="display:none"></div></div>`;
+<div class="answer-buttons-container">
+<div class="answer-buttons ${isBrainscape?'brainscape-mode':mode==='fsrs'?'fsrs-mode':'classic-mode'}" id="answerButtons" style="display:none"></div>
+</div>
+`;
+        if(mode==='brainscape'){
+            const dotsContainer=document.getElementById('ratingDots');
+            if(dotsContainer){
+                dotsContainer.innerHTML='';
+                const history=study.ratingsHistory||[];
+                const maxDots=20;
+                const startIdx=Math.max(0,history.length-maxDots);
+                for(let i=startIdx;i<history.length;i++){
+                    const dot=document.createElement('div');
+                    dot.className='brainscape-dot rated-'+history[i];
+                    dotsContainer.appendChild(dot);
+                }
+            }
+        }
         if(mode==='brainscape') renderBrainscapeButtons(card);
         else if(mode==='fsrs') renderFSRSButtons(card);
         else if(mode==='typing') renderTypingMode(card);
@@ -1990,6 +2047,7 @@ return response;
     }
     function renderBrainscapeButtons(card){
         const container=document.getElementById('answerButtons');
+        if(!container) return;
         container.innerHTML=`<button class="answer-btn c1 brainscape-circle" onclick="answerBrainscape(1)"><span class="rating">1</span><span class="btn-label">not at all</span></button>
 <button class="answer-btn c2 brainscape-circle" onclick="answerBrainscape(2)"><span class="rating">2</span></button>
 <button class="answer-btn c3 brainscape-circle" onclick="answerBrainscape(3)"><span class="rating">3</span></button>
@@ -2012,14 +2070,11 @@ return response;
 <button class="answer-btn good" onclick="answerClassic('good')"><span>${t('good')}</span><span class="interval">${intervals.good}</span></button>
 <button class="answer-btn easy" onclick="answerClassic('easy')"><span>${t('easy')}</span><span class="interval">${intervals.easy}</span></button>`;
     }
-
     function renderTypingMode(card){
         const showBtn=document.getElementById('showAnswerBtn');
         const answerBtns=document.getElementById('answerButtons');
         if(showBtn) showBtn.style.display='none';
         if(answerBtns) answerBtns.style.display='none';
-
-// Create typing overlay OUTSIDE the flashcard (below it)
         let typingOverlay=document.querySelector('.typing-overlay');
         if(!typingOverlay){
             typingOverlay=document.createElement('div');
@@ -2043,7 +2098,6 @@ return response;
             }
         },100);
     }
-
     function checkTypingAnswer(){
         const input=document.getElementById('typingAnswer');
         const resultEl=document.getElementById('typingResult');
@@ -2085,7 +2139,7 @@ return response;
     function buildBackCard(card){
         let html=`<div class="card-header-row"><span class="card-label">${t('answer')}</span></div>`;
         const word=card.word||card.front||'';
-        if(word) html+=`<div style="font-size:calc(1.15rem * var(--card-font-scale));margin-bottom:8px;text-align:center;font-weight:700" dir="auto">${escapeHtml(word)}</div>`;
+        if(word) html+=`<div style="font-size:calc(0.9rem * var(--card-font-scale));margin-bottom:14px;text-align:center;font-weight:500;color:var(--text-secondary);opacity:0.85;letter-spacing:0.3px" dir="auto">${escapeHtml(word)}</div>`;
         const meaning=card.meaning||card.back||'';
         if(meaning){
             html+=`<div class="card-section"><div class="card-meaning" onclick="event.stopPropagation();playCardAudio('${escapeHtml(card.audioFile3||'')}','meaning')">
@@ -2118,7 +2172,6 @@ return response;
         return html;
     }
     let currentPlayingAudio=null;
-
     async function playCardAudio(filename,type='word'){
         if(!filename) return;
         let url=mediaUrlCache.get(filename);
@@ -2149,7 +2202,6 @@ return response;
             };
         }catch(e){console.error('Audio creation failed:',e);}
     }
-
     async function playAudioAndWait(filename, type) {
         if (!filename) return;
         let url = mediaUrlCache.get(filename);
@@ -2200,34 +2252,61 @@ return response;
         });
     }
     const delay = (ms) => new Promise(r => setTimeout(r, ms));
-
     async function flipCard(){
+        const wrapper=document.getElementById('flashcardWrapper');
         const flashcard=document.getElementById('flashcard');
         const showBtn=document.getElementById('showAnswerBtn');
         const answerBtns=document.getElementById('answerButtons');
-        if(!flashcard) return;
-        if(!flashcard.classList.contains('flipped')){
-            flashcard.classList.add('flipped');
-            if(showBtn) showBtn.style.display='none';
-            if(answerBtns) answerBtns.style.display='grid';
-            if(state.settings.sound) playSound('flip');
-            const study=state.currentStudy;
-            if(study && state.settings.autoplay){
-                const card=study.cards[study.currentIndex];
-                if(card){
-                    await delay(500);
-                    if(state.settings.replayFrontAudio && card.audioFile){await playAudioAndWait(card.audioFile,'word');await delay(400);}
-                    if(card.audioFile3){await playAudioAndWait(card.audioFile3,'meaning');await delay(600);}
-                    if(card.audioFile2 && card.audioFile2!==card.audioFile){await playAudioAndWait(card.audioFile2,'example');}
+        const mode = state.settings.studyMode || 'brainscape';
+        if(mode === 'brainscape'){
+            if(!wrapper || !wrapper.classList.contains('revealed')){
+                if(wrapper) wrapper.classList.add('revealed');
+                if(showBtn) showBtn.style.display='none';
+                if(answerBtns) answerBtns.style.display='grid';
+                if(state.settings.sound) playSound('flip');
+                const study=state.currentStudy;
+                if(study && state.settings.autoplay){
+                    const card=study.cards[study.currentIndex];
+                    if(card){
+                        await delay(500);
+                        if(state.settings.replayFrontAudio && card.audioFile){await playAudioAndWait(card.audioFile,'word');await delay(400);}
+                        if(card.audioFile3){await playAudioAndWait(card.audioFile3,'meaning');await delay(600);}
+                        if(card.audioFile2 && card.audioFile2!==card.audioFile){await playAudioAndWait(card.audioFile2,'example');}
+                    }
                 }
+            } else {
+                wrapper.classList.remove('revealed');
+                if(showBtn) showBtn.style.display='';
+                if(answerBtns) answerBtns.style.display='none';
+                if(bsPanel) bsPanel.style.display='none';
+                if(currentPlayingAudio){try{currentPlayingAudio.pause();}catch(e){}currentPlayingAudio=null;}
+                const btns=document.querySelectorAll('.card-audio-inline.playing');
+                btns.forEach(b=>{b.classList.remove('playing');const icon=b.querySelector('.mini-icon');if(icon) icon.textContent='🔊';});
             }
-        }else{
-            flashcard.classList.remove('flipped');
-            if(showBtn) showBtn.style.display='';
-            if(answerBtns) answerBtns.style.display='none';
-            if(currentPlayingAudio){try{currentPlayingAudio.pause();}catch(e){}currentPlayingAudio=null;}
-            const btns=document.querySelectorAll('.card-audio-inline.playing');
-            btns.forEach(b=>{b.classList.remove('playing');const icon=b.querySelector('.mini-icon');if(icon) icon.textContent='🔊';});
+        } else {
+            if(!flashcard || !flashcard.classList.contains('flipped')){
+                if(flashcard) flashcard.classList.add('flipped');
+                if(showBtn) showBtn.style.display='none';
+                if(answerBtns) answerBtns.style.display='grid';
+                if(state.settings.sound) playSound('flip');
+                const study=state.currentStudy;
+                if(study && state.settings.autoplay){
+                    const card=study.cards[study.currentIndex];
+                    if(card){
+                        await delay(500);
+                        if(state.settings.replayFrontAudio && card.audioFile){await playAudioAndWait(card.audioFile,'word');await delay(400);}
+                        if(card.audioFile3){await playAudioAndWait(card.audioFile3,'meaning');await delay(600);}
+                        if(card.audioFile2 && card.audioFile2!==card.audioFile){await playAudioAndWait(card.audioFile2,'example');}
+                    }
+                }
+            } else {
+                if(flashcard) flashcard.classList.remove('flipped');
+                if(showBtn) showBtn.style.display='';
+                if(answerBtns) answerBtns.style.display='none';
+                if(currentPlayingAudio){try{currentPlayingAudio.pause();}catch(e){}currentPlayingAudio=null;}
+                const btns=document.querySelectorAll('.card-audio-inline.playing');
+                btns.forEach(b=>{b.classList.remove('playing');const icon=b.querySelector('.mini-icon');if(icon) icon.textContent='🔊';});
+            }
         }
         haptic();
     }
@@ -2241,6 +2320,8 @@ return response;
         study.xpEarned=(study.xpEarned||0)+xp;study.lastConfidence=confidence;
         study.answered[confidence]=(study.answered[confidence]||0)+1;
         study.ratings[cardId]=confidence;
+        if(!study.ratingsHistory) study.ratingsHistory = [];
+        study.ratingsHistory.push(confidence);
         const timeSpent=Date.now()-(study.cardTimes[cardId]||Date.now());
         study.cardTimes[cardId]=timeSpent;
         updateStats();
@@ -2357,7 +2438,6 @@ return response;
         else{dueDate=now+newInterval*24*60*60*1000;interval=newInterval;}
         return{...card,interval:newInterval/(newStatus==='learning'?1:(24*60*60*1000)),repetitions:newRepetitions,status:newStatus,dueDate,confidence,lastReview:now,reviewCount:(card.reviewCount||0)+1};
     }
-
     function showStudyComplete(deckId) {
         lastStudiedDeckId = deckId;
         const study = state.currentStudy;
@@ -2382,7 +2462,6 @@ return response;
         const xpEarned = study ? study.xpEarned || 0 : 0;
         if (xpEarned > 0) addXp(xpEarned, 'Study session');
         setTimeout(() => checkAchievements(), 500);
-
         const cardTimes = study ? study.cardTimes : {};
         const timeValues = Object.values(cardTimes).filter(v => typeof v === 'number' && v > 0);
         const avgTime = timeValues.length > 0 ? Math.round(timeValues.reduce((s, v) => s + v, 0) / timeValues.length / 1000) : 0;
@@ -2396,7 +2475,6 @@ return response;
             .map(([id]) => state.cards[id])
             .filter(c => c)
             .slice(0, 5);
-
         container.innerHTML = `<div class="study-complete animate-slideUp">
 <div class="complete-icon">🎉</div>
 <h2>${t('congratulations')}</h2>
@@ -2459,14 +2537,12 @@ ${weakCards.map(c => `<div class="weak-card-item">
             header.classList.remove('hidden');
             header.style.visibility = 'visible';
         }
-// Remove typing overlay if exists
         const typingOverlay=document.querySelector('.typing-overlay');
         if(typingOverlay) typingOverlay.remove();
         updateNavPadding();
         navigateTo('decksPage');
         showBottomNav();
     }
-
     // ===== Import =====
     function showImportModal() {
         openModal(`<h2 class="modal-title">${t('importDeck')}</h2>
@@ -2602,7 +2678,6 @@ ${weakCards.map(c => `<div class="weak-card-item">
             showToast(t('importFailed'), 'error');
         }
     }
-
     async function importAPKG(file) {
         const progressContainer = document.getElementById('importProgressContainer');
         const updateProgress = (pct, text, detail = '') => {
@@ -2626,11 +2701,8 @@ ${weakCards.map(c => `<div class="weak-card-item">
             const mediaEntries = Object.entries(mediaMap);
             const totalMedia = mediaEntries.length;
             let mediaCount = 0;
-
-// 🚀 Batch processing for memory efficiency
             const BATCH_SIZE = 10;
             let batchPromises = [];
-
             for (let i = 0; i < mediaEntries.length; i++) {
                 const [indexName, actualName] = mediaEntries[i];
                 try {
@@ -2650,9 +2722,7 @@ ${weakCards.map(c => `<div class="weak-card-item">
                                 blob = null;
                             }
                         }).catch(e => console.warn(`Media save error ${indexName}:`, e));
-
                         batchPromises.push(blobPromise);
-
                         if (batchPromises.length >= BATCH_SIZE) {
                             await Promise.all(batchPromises);
                             batchPromises = [];
@@ -2666,12 +2736,10 @@ ${weakCards.map(c => `<div class="weak-card-item">
                     }
                 } catch (e) {console.warn(`Media error ${indexName}:`, e)}
             }
-
             if (batchPromises.length > 0) {
                 await Promise.all(batchPromises);
                 batchPromises = [];
             }
-
             updateProgress(55, t('initializingDB'));
             const SQL = await initSqlJs({locateFile: f => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/${f}`});
             const db = new SQL.Database(new Uint8Array(dbBuffer));
@@ -2813,7 +2881,6 @@ ${weakCards.map(c => `<div class="weak-card-item">
             progressContainer.innerHTML = `<div class="import-progress"><h3>❌ ${t('importFailed')}</h3><p class="progress-text" style="color:var(--danger)">${escapeHtml(e.message)}</p><button class="btn btn-secondary" style="margin-top:10px" type="button" onclick="closeModalDirect()">${t('close')}</button></div>`;
         }
     }
-
     function cleanText(text) {
         if (!text) return '';
         let t = text;
@@ -2826,7 +2893,6 @@ ${weakCards.map(c => `<div class="weak-card-item">
         t = t.replace(/<[^>]+>/g, '');
         return t.trim();
     }
-
     // ===== Add Card =====
     function showAddCardModal(deckId = null) {
         const deckOptions = Object.keys(state.decks).map(id => `<option value="${id}" ${id === deckId ? 'selected' : ''}>${escapeHtml(state.decks[id].name)}</option>`).join('');
@@ -2845,7 +2911,6 @@ ${weakCards.map(c => `<div class="weak-card-item">
             document.getElementById('newDeckNameGroup').style.display = this.value === '__new__' ? 'block' : 'none';
         });
     }
-
     async function addCard() {
         let deckId = document.getElementById('addCardDeck').value;
         const word = document.getElementById('addCardFront').value.trim();
@@ -2892,7 +2957,6 @@ ${weakCards.map(c => `<div class="weak-card-item">
         addXp(5, 'Card added');
         checkAchievements();
     }
-
     // ===== Browse =====
     function showBrowseModal(deckId = null) {
         const deckOptions = Object.keys(state.decks).map(id => `<option value="${id}" ${id === deckId ? 'selected' : ''}>${escapeHtml(state.decks[id].name)}</option>`).join('');
@@ -2995,7 +3059,6 @@ ${weakCards.map(c => `<div class="weak-card-item">
         closeModalDirect();
         setTimeout(()=>{showBrowseModal(card.deckId);showToast(t('deckRenamed'),'success')},150);
     }
-
     // ===== Stats =====
     function renderStats() {
         const totalCards = Object.keys(state.cards).length;
@@ -3044,7 +3107,6 @@ ${weakCards.map(c => `<div class="weak-card-item">
             return `<div class="${cls}" title="${d.date}: ${d.count} cards"></div>`;
         }).join('');
     }
-
     function renderForgettingCurve(){
         const canvas = document.getElementById('forgettingCurveChart');
         if(!canvas) return;
@@ -3079,7 +3141,6 @@ ${weakCards.map(c => `<div class="weak-card-item">
             }
         });
     }
-
     // ===== Data Management =====
     function exportData() {
         const data = JSON.parse(JSON.stringify(state));
@@ -3195,32 +3256,29 @@ ${weakCards.map(c => `<div class="weak-card-item">
         }
         return a;
     }
-
     // ===== Keyboard shortcuts =====
     document.addEventListener('keydown', e => {
         const studyPage = document.getElementById('studyPage');
         if (!studyPage.classList.contains('active')) return;
         const flashcard = document.getElementById('flashcard');
-        if (!flashcard) return;
+        const wrapper = document.getElementById('flashcardWrapper');
+        const mode = state.settings.studyMode || 'brainscape';
         if (e.code === 'Space') {
             e.preventDefault();
             flipCard();
         }
-        if (flashcard.classList.contains('flipped')) {
-            const mode = state.settings.studyMode || 'brainscape';
-            if (mode === 'brainscape') {
-                if (e.key >= '1' && e.key <= '5') answerBrainscape(parseInt(e.key));
-            } else if (mode === 'fsrs') {
-                if (e.key === '1') answerFSRS(1);
-                if (e.key === '2') answerFSRS(2);
-                if (e.key === '3') answerFSRS(3);
-                if (e.key === '4') answerFSRS(4);
-            } else {
-                if (e.key === '1') answerClassic('again');
-                if (e.key === '2') answerClassic('hard');
-                if (e.key === '3') answerClassic('good');
-                if (e.key === '4') answerClassic('easy');
-            }
+        if (mode === 'brainscape' && wrapper && wrapper.classList.contains('revealed')) {
+            if (e.key >= '1' && e.key <= '5') answerBrainscape(parseInt(e.key));
+        } else if (mode === 'fsrs' && flashcard && flashcard.classList.contains('flipped')) {
+            if (e.key === '1') answerFSRS(1);
+            if (e.key === '2') answerFSRS(2);
+            if (e.key === '3') answerFSRS(3);
+            if (e.key === '4') answerFSRS(4);
+        } else if (flashcard && flashcard.classList.contains('flipped')) {
+            if (e.key === '1') answerClassic('again');
+            if (e.key === '2') answerClassic('hard');
+            if (e.key === '3') answerClassic('good');
+            if (e.key === '4') answerClassic('easy');
         }
     });
     init();
