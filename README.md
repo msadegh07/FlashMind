@@ -1,106 +1,59 @@
-# 🧠 FlashMind
+# FlashMind Pro v12.0 — Brainscape × AnkiDroid Ultimate Edition
 
-**A modern, open-source spaced-repetition web app combining the power and flexibility of AnkiDroid with the intuitive confidence-based learning experience of Brainscape.**
-
-[![Live Demo](https://img.shields.io/badge/Live_Demo-GitHub_Pages-2ea44f?style=for-the-badge)](https://msadegh07.github.io/FlashMind/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](LICENSE)
-[![Status](https://img.shields.io/badge/Status-Active_Development-orange?style=for-the-badge)](#optimization-roadmap)
-
-👉 **Try the live web app directly in your browser (no installation required):** **[https://msadegh07.github.io/FlashMind/](https://msadegh07.github.io/FlashMind/)**
+**FlashMind Pro** یک پلتفرم جامع و فوق‌حرفه‌ای فلش‌کارت و تکرار فاصله‌دار (Spaced Repetition) تحت وب (PWA) است که بهترین ویژگی‌های نسخه‌های پریمیوم **Brainscape Pro** و **AnkiDroid / Anki Desktop** را در یک رابط کاربری مدرن، سریع، دوجهته (فارسی راست‌چین / انگلیسی چپ‌چین) و کاملاً ریسپانسیو ترکیب می‌کند.
 
 ---
 
-## 📖 Overview
+## ویژگی‌های کلیدی پیاده‌سازی‌شده
 
-Learners using digital flashcards often face a trade-off between **customization** and **usability**:
-- **Anki / AnkiDroid** offers unmatched spaced-repetition scheduling and open deck ecosystems, but suffers from a steep learning curve and dated interface friction.
-- **Brainscape** delivers a clean, motivating, confidence-based study flow (rating mastery from 1 to 5), but is proprietary, closed-source, and locks core features behind paywalls.
+### ۱. موتور زمان‌بندی سه‌گانه (Triple Spaced Repetition Engine)
+- **Brainscape CBR (Confidence-Based Repetition 1–5):** امتیازدهی اطمینان ۱ تا ۵ با رنگ‌بندی اختصاصی (قرمز تا فیروزه‌ای)، شاخص تسلط وزنی (Weighted Mastery %) برای هر دسته و کل کتابخانه، و تکرار هوشمند کارت‌های سطح ۱ و ۲ در همان جلسه.
+- **FSRS-4.5 AI Scheduler:** جدیدترین الگوریتم حافظه آنکی مبتنی بر مدل DSR (دشواری، پایداری و بازیابی‌پذیری) با قابلیت تنظیم نرخ یادآوری هدف (`85%` تا `95%`).
+- **Classic AnkiDroid SM-2:** الگوریتم کلاسیک ۴ دکمه‌ای (`Again`, `Hard`, `Good`, `Easy`) با گام‌های یادگیری دقیقه‌ای و ضریب آسانی پویا.
 
-**FlashMind** bridges this gap. Built as a lightweight, zero-install Progressive/Web application hosted on GitHub Pages, FlashMind brings Brainscape-style confidence-based active recall together with Anki-inspired deck management and spaced-repetition mechanics—completely free and open source.
+### ۲. انواع کارت و حالت‌های تعاملی مطالعه
+- **Basic (رو ← پشت):** پشتیبانی از واژه، فونتیک (IPA)، معنی، جمله مثال، راهنما (Hint)، برچسب‌ها، تصویر و ۳ کانال صوتی مجزا.
+- **Basic & Reversed (دوطرفه خودکار):** تولید همزمان ۲ کارت رفت و برگشت با یک کلیک.
+- **Cloze Deletion (`{{c1::پاسخ::راهنما}}`):** پشتیبانی کامل از سینتکس استاندارد جای خالی آنکی به همراه دکمه درج سریع در ویرایشگر.
+- **Multiple Choice Quiz (چهارگزینه‌ای):** تولید هوشمند گزینه‌های انحرافی از سایر کارت‌های دسته یا گزینه‌های سفارشی کاربر.
+- **Type-Answer (تایپ پاسخ + مقایسه کاراکتری):** بررسی دقیق املا با نمایش رنگی تفاوت کاراکترها (Character-level Diff).
+- **Custom / Filtered Study:** ساخت جلسات مطالعه سفارشی بر اساس کارت‌های ضعیف (۱ و ۲)، کارت‌های موعد مرور، کارت‌های پرچم‌دار، کارت‌های فرّار (Leeches)، برچسب خاص یا مرور فشرده شب امتحان (Cram).
 
----
+### ۳. ابزارهای حرفه‌ای حین مطالعه (الهام‌گرفته از AnkiDroid)
+- **Undo (`Ctrl+Z`):** بازگردانی کامل آخرین امتیاز ثبت‌شده به همراه وضعیت قبلی صف و آمار.
+- **تخته رسم دیجیتال (Whiteboard Scratchpad):** امکان نوشتن و تمرین املا یا فرمول‌ها مستقیماً روی کارت با ماوس یا لمس انگشت.
+- **پرچم‌گذاری ۴ رنگ (Flags 1–4):** علامت‌گذاری سریع کارت‌ها (قرمز، نارنجی، سبز، آبی).
+- **مخفی کردن تا فردا (Bury) و تعلیق کارت (Suspend)** و **تشخیص خودکار کارت‌های فرّار (Leech Detection)**.
+- **تلفظ هوشمند (Web Speech TTS + MP3):** پخش خودکار فایل‌های صوتی استخراج‌شده از آنکی و تلفظ ماشینی هوشمند در صورت نبود فایل صوتی.
+- **میانبرهای کامل صفحه‌کلید:** `Space`/`Enter` برای نمایش پاسخ، کلیدهای `1` تا `5` برای ثبت امتیاز، `Ctrl+Z` برای بازگشت، `W` برای تخته رسم، `R` برای تکرار تلفظ و `E` برای ویرایش درجا.
 
-## ⚖️ How FlashMind Compares
+### ۴. مرورگر پیشرفته کارت‌ها (Dedicated Card Browser)
+- صفحه مستقل جستجوی آنی در متن رو، پشت، مثال و برچسب‌ها.
+- فیلترهای تک‌کلیکی (`Due`, `New`, `Weak 1–2`, `Mastered 5`, `Flagged`, `Suspended`, `Leeches`).
+- عملیات گروهی (Batch Actions): تعلیق/فعال‌سازی گروهی، بازنشانی پیشرفت و حذف دسته‌جمعی.
 
-| Dimension | Anki / AnkiDroid | Brainscape | FlashMind |
-| :--- | :--- | :--- | :--- |
-| **Licensing & Access** | Open Source (GPL/AGPL) | Proprietary / Freemium | **100% Open Source (MIT)** |
-| **Platform & Setup** | Desktop & Mobile apps required | Web & Mobile apps | **Instant Web App (Zero Install)** |
-| **Review UX** | Traditional 4-button intervals | Confidence-based rating (1–5) | **Confidence-based + SRS hybrid** |
-| **Deck Flexibility** | High customization & portability | Structured, rigid hierarchy | **Flexible & portable decks** |
-| **Onboarding Friction** | Steep learning curve | Smooth & intuitive | **Clean, fast, distraction-free** |
+### ۵. داشبورد آماری پیشرفته و گیمیفیکیشن
+- ۴ نمودار تحلیلی با `Chart.js`: نمودار مرور روزانه، **پیش‌بینی بار مرور ۱۴ روز آینده (Anki Forecast)**، نمودار حلقه‌ای بلوغ و طیف اطمینان کارت‌ها، و منحنی نرخ یادآوری.
+- **تقویم حرارتی ۹۰ روزه (Study Heatmap)** به سبک GitHub/Anki.
+- سیستم سطح‌بندی (۱۰ سطح از مبتدی تا جاودان)، امتیاز XP، شمارنده روزهای متوالی (Streak)، چالش روزانه و تایمر تمرکز **پومودورو (۲۵ دقیقه‌ای)**.
+- ۶ پوسته حرفه‌ای: `Midnight Dark`، `Pure AMOLED`، `Crisp Light`، `Arctic Nord`، `Dracula Pro` و `Emerald Zen`.
 
----
-
-## ✨ Key Features
-
-- **Confidence-Based Active Recall:** Rate how well you know each concept on a granular confidence scale so weak cards resurface faster while mastered concepts space out automatically.
-- **Hybrid Spaced Repetition Engine:** Combines immediate session reinforcement with long-term retention intervals.
-- **Instant Browser Access:** Runs directly via [GitHub Pages](https://msadegh07.github.io/FlashMind/) across desktop and mobile browsers without account lock-in.
-- **Deck & Card Management:** Create, organize, edit, and review custom flashcard decks with clean keyboard- and touch-friendly controls.
-- **Lightweight Client-Side Architecture:** Fast load times and responsive study sessions designed for daily habit building.
-
----
-
-## 📸 Screenshots
-
-> *Tip: Replace these placeholders with 1–2 screenshots of your study screen and deck dashboard.*
-
-```text
-[ Add screenshot of the Main Study Interface & Confidence Rating Bar here ]
-[ Add screenshot of the Deck Library & Progress Overview here ]
-```
+### ۶. درون‌ریزی و برون‌بری استاندارد + حفظ ۱۰۰٪ داده‌های قبلی
+- **درون‌ریزی مستقیم بسته‌های آنکی (`.apkg`):** استخراج آرشیو ZIP، پایگاه داده SQLite (`collection.anki21` / `collection.anki2`) با محاسبه دقیق تاریخ موعد (`col.crt`) و ذخیره ایمن فایل‌های صوتی/تصویری در `IndexedDB` مرورگر (بدون ذخیره Base64 در JSON).
+- **درون‌ریزی و برون‌بری `CSV` / `TSV` استاندارد آنکی و پشتیبان کامل `JSON`.**
+- **سازگاری کامل با نسخه قبلی:** کلید ذخیره‌سازی `localStorage` (`flashmind_pro_v10`) و دیتابیس مدیای `IndexedDB` (`flashmind_media_v2`) دقیقاً حفظ شده‌اند تا هیچ‌یک از دسته‌ها و سوابق کاربران قبلی از بین نرود.
 
 ---
 
-## 🚀 Running Locally
+## ساختار فایل‌های پروژه
 
-Because FlashMind is built as a lightweight web application, getting a local copy running takes seconds:
+- `index.html` — ساختار معنایی HTML5 دوجهته (RTL/LTR)، سایدبار دسکتاپ، ناوبری موبایل و تمام صفحات برنامه
+- `css/style.css` — سیستم طراحی مدرن، ۶ تم رنگی، انیمیشن‌های سه‌بعدی و چیدمان واکنش‌گرا
+- `js/core.js` — دیکشنری دوزبانه (فارسی/انگلیسی)، مدیریت وضعیت و مهاجرت ایمن داده‌ها، ذخیره‌ساز مدیای IndexedDB، الگوریتم‌های `FSRS-4.5`، `SM-2` و `Brainscape CBR`، پارسر Cloze و موتور TTS
+- `js/study.js` — موتور جلسه مطالعه، نوار ابزار AnkiDroid، تخته رسم (Whiteboard)، پشته Undo، حالت‌های تستی/تایپی و درون‌ریز `.apkg` / `CSV` / `JSON`
+- `js/ui.js` — کنترلر صفحات، مرورگر کارت‌ها، ویرایشگر کارت، نمودارهای آماری `Chart.js`، پومودورو و میانبرهای صفحه‌کلید
+- `manifest.json` — مانیفست وب‌اپلیکیشن پیش‌رونده (PWA)
 
-1. **Clone the repository:**
-   ```bash
-   git clone [https://github.com/msadegh07/FlashMind.git](https://github.com/msadegh07/FlashMind.git)
-   cd FlashMind
-   ```
-2. **Launch locally:**
-   Open `index.html` directly in your browser, or serve the directory using any local static server:
-   ```bash
-   # Using Python
-   python -m http.server 8080
-   ```
-   Then visit `http://localhost:8080`.
-
----
-
-## 🗺️ Optimization Roadmap
-
-FlashMind is under active development. Below are the core architectural and UX optimizations currently planned and in progress:
-
-- [x] Core hybrid study engine combining confidence-based rating with spaced repetition
-- [x] Live deployment on GitHub Pages
-- [ ] **Enhanced SRS Scheduling Algorithm:** Adaptive interval tuning inspired by FSRS / SM-2 optimizations for higher long-term retention accuracy
-- [ ] **Anki Interoperability (`.apkg` / `.csv`):** Seamless import and export support to migrate existing AnkiDroid decks effortlessly
-- [ ] **Offline-First PWA & Sync:** Full offline caching via Service Workers and optional lightweight backup/sync across devices
-- [ ] **Rich Card Formatting:** Support for Markdown, code syntax highlighting, LaTeX math formulas, and audio/image occlusion
-- [ ] **Study Analytics & Heatmaps:** Visual mastery breakdowns, retention curves, and daily streak tracking
-- [ ] **Performance & Accessibility:** Keyboard shortcuts for power users, mobile gesture controls, and bundle/rendering optimizations
-
----
-
-## 🤝 Contributing
-
-Contributions, bug reports, and feature ideas are welcome!
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-optimization`)
-3. Commit your changes (`git commit -m "Add amazing optimization"`)
-4. Push to the branch (`git push origin feature/amazing-optimization`)
-5. Open a Pull Request
-
-Feel free to open an [Issue](https://github.com/msadegh07/FlashMind/issues) to discuss new ideas for the spaced-repetition engine or UI improvements.
-
----
-
-## 📄 License
-
-Distributed under the **MIT License**. See [`LICENSE`](LICENSE) for more information.
+### پارامترهای URL پشتیبانی‌شده
+- `?view=decks` | `?view=browser` | `?view=stats` | `?view=settings` | `?view=study`
+- `?mode=brainscape` | `fsrs` | `classic` | `mcq` | `typing` | `cram`
